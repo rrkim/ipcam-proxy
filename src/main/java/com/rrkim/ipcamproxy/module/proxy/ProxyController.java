@@ -2,10 +2,10 @@ package com.rrkim.ipcamproxy.module.proxy;
 
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-//import org.springframework.http.ResponseEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,10 +21,11 @@ import java.io.OutputStream;
 public class ProxyController {
     private final RestTemplate restTemplate;
 
+    @Value("${talchwi.ipcam.url}")
+    private String cameraUrl;
+
     @GetMapping("/stream")
     public void streamCamera(HttpServletResponse response) {
-        String cameraUrl = "http://localhost:8080/stream";
-
         RequestCallback requestCallback = request -> {
             request.getHeaders().add(HttpHeaders.ACCEPT, "image/jpeg");
         };
@@ -45,14 +46,12 @@ public class ProxyController {
             return null;
         };
 
-        restTemplate.execute(cameraUrl, HttpMethod.GET, requestCallback, responseExtractor);
+        restTemplate.execute(cameraUrl + "/stream", HttpMethod.GET, requestCallback, responseExtractor);
     }
 
     @GetMapping("/auth/secure-key")
     public ResponseEntity<String> secureKey() {
-        String cameraUrl = "http://localhost:8080/auth/secure-key";
-
-        ResponseEntity<String> response = restTemplate.getForEntity(cameraUrl, String.class);
+        ResponseEntity<String> response = restTemplate.getForEntity(cameraUrl + "/auth/secure-key", String.class);
         return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
     }
 }
