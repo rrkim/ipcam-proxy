@@ -1,4 +1,4 @@
-package com.rrkim.ipcamserver.module.proxy;
+package com.rrkim.ipcamproxy.module.proxy;
 
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -6,6 +6,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 //import org.springframework.http.ResponseEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RequestCallback;
@@ -45,5 +46,13 @@ public class ProxyController {
         };
 
         restTemplate.execute(cameraUrl, HttpMethod.GET, requestCallback, responseExtractor);
+    }
+
+    @GetMapping("/auth/secure-key")
+    public ResponseEntity<String> secureKey() {
+        String cameraUrl = "http://localhost:8080/auth/secure-key";
+
+        ResponseEntity<String> response = restTemplate.getForEntity(cameraUrl, String.class);
+        return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
     }
 }

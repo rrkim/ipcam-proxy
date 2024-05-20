@@ -1,4 +1,4 @@
-package com.rrkim.ipcamserver.core.configuration.bean;
+package com.rrkim.ipcamproxy.core.configuration.bean;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,4 +1,4 @@
-package com.rrkim.ipcamserver;
+package com.rrkim.ipcamproxy;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

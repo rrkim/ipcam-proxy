@@ -1,4 +1,4 @@
-package com.rrkim.ipcamserver;
+package com.rrkim.ipcamproxy;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
