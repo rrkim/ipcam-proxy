@@ -1,5 +1,7 @@
 package com.rrkim.ipcamproxy.module.proxy;
 
+import com.rrkim.ipcamproxy.module.proxy.dto.IPCamApiResponse;
+import com.rrkim.ipcamproxy.module.proxy.dto.SecureKeyRequestDto;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -46,17 +49,12 @@ public class ProxyController {
     }
 
     @PostMapping("/auth/secure-key")
-    public ResponseEntity<String> secureKey(@RequestBody String uuid) {
+    public ResponseEntity<IPCamApiResponse> secureKey(@RequestBody(required = false) SecureKeyRequestDto secureKeyRequestDto) {
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.TEXT_PLAIN);
-        HttpEntity<String> requestEntity = new HttpEntity<>(uuid, headers);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<SecureKeyRequestDto> requestEntity = new HttpEntity<>(secureKeyRequestDto, headers);
 
-        ResponseEntity<String> response = restTemplate.exchange(
-            cameraUrl + "/auth/secure-key",
-            HttpMethod.POST,
-            requestEntity,
-            String.class
-        );
+        ResponseEntity<IPCamApiResponse> response = restTemplate.exchange(cameraUrl + "/auth/secure-key", HttpMethod.POST, requestEntity, IPCamApiResponse.class);
 
         return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
     }
